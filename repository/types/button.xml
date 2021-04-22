@@ -206,6 +206,18 @@
       <RegularExpressionValidation>^.*$</RegularExpressionValidation>
     </Attribute>
     <Attribute>
+      <Name>displaying</Name>
+      <DisplayName>#Lang(1005)</DisplayName>
+      <DefaultValue>6</DefaultValue>
+      <Visible>1</Visible>
+      <Help>#Lang(2005)</Help>
+      <InterfaceType>0</InterfaceType>
+      <CodeInterface>DropDown((#Lang(4011)|1)|(#Lang(4012)|2)|(#Lang(4013)|3)|(#Lang(4014)|4)|(#Lang(4015)|5)|(#Lang(4016)|6))</CodeInterface>
+      <Colorgroup>2</Colorgroup>
+      <ErrorValidationMessage>#Lang(305)</ErrorValidationMessage>
+      <RegularExpressionValidation>^[0123456]$</RegularExpressionValidation>
+    </Attribute>
+    <Attribute>
       <Name>text</Name>
       <DisplayName>#Lang(117)</DisplayName>
       <DefaultValue/>
@@ -407,7 +419,7 @@ There are the following ways of displaying the Button object: if the 'Text' attr
       <Sentence ID="101"></Sentence>
       <Sentence ID="102">Hierarchy</Sentence>
       <Sentence ID="103">Visibility</Sentence>
-      <Sentence ID="104">Z-Index</Sentence>
+      <Sentence ID="104">Zopo4ka-Index</Sentence>
       <Sentence ID="105">Top</Sentence>
       <Sentence ID="106">Left</Sentence>
       <Sentence ID="107">Width</Sentence>
@@ -598,6 +610,15 @@ There are the following ways of displaying the Button object: if the 'Text' attr
       <Sentence ID="915">Current X-value</Sentence>
       <Sentence ID="916">Current X-value</Sentence>
       <Sentence ID="917">Current X-value</Sentence>
+      <Sentence ID="1005">Display</Sentence>
+      <Sentence ID="2005">newAttribute25</Sentence>
+      <Sentence ID="3005">newAttribute25</Sentence>
+      <Sentence ID="4011">Block</Sentence>
+      <Sentence ID="4012">Inline</Sentence>
+      <Sentence ID="4013">Flex</Sentence>
+      <Sentence ID="4014">Grid</Sentence>
+      <Sentence ID="4015">Inline-block</Sentence>
+      <Sentence ID="4016">Inline-block</Sentence>
     </Language>
     <Language Code="fr_FR">
       <Sentence ID="001">Bouton</Sentence>
@@ -1224,6 +1245,30 @@ class VDOM_button(VDOM_object):
             disabled_html = u"""<div id='{id}_e2vdomhelper' class='disabled-over' style='{zindex_disabled}background:#fff;opacity:0.01;filter:alpha(opacity=1);position:absolute;left:{left}px;top:{top}px;width:{width}px;height:{height}px;'></div>
                 """.format(id = id_out, zindex_disabled = zindex_disabled, width = self.width, height = self.height, left = self.left, top = self.top, classname = clname)
 
+
+        # Display
+
+        if self.displaying == "1":
+            display_style = u"block"
+            displaying = u" display: block; "
+        elif self.displaying == "2":
+            display_style = u"inline"
+            displaying = u" display: inline; "
+        elif self.displaying == "3":
+            display_style = u"flex"
+            displaying = u" display: flex; "
+        elif self.displaying == "4":
+            display_style = u"grid"
+            displaying = u" display: grid; "
+        elif self.displaying == "5":
+            display_style = u"inline-block"
+            displaying = u" display: inline-block; "
+        else:
+            display_style = u""
+            displaying = u""
+        
+
+
         overcss = u"<style>\n" + self.style % {"id": id_out} + u"</style>" if self.style else u""
         disablecss = u""
         representation = u""
@@ -1308,9 +1353,10 @@ class VDOM_button(VDOM_object):
 
         style_zindex = u"z-index:%s;" % self.zindex if int(self.zindex) <> 0 else u""
 
-        style = u"""overflow:hidden;position:absolute;{zindex}left:{left}px;top:{top}px;
+        style = u"""{display_format} overflow:hidden;position:absolute;{zindex}left:{left}px;top:{top}px;
                     {wstyle}{hstyle}text-align:{align};border:{border}px solid black;
                 """.format(
+                        display_format = displaying,
                         zindex = style_zindex, left = self.left, top = self.top, 
                         wstyle = width_style, hstyle = height_style, align = self.align, border = self.border)
 
