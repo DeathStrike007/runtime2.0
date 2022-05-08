@@ -214,6 +214,18 @@
 			<ColorGroup>4</ColorGroup>
 		</Attribute>
 		<Attribute>
+		  <Name>displaying</Name>
+		  <DisplayName>#Lang(1005)</DisplayName>
+		  <DefaultValue>5</DefaultValue>
+		  <Visible>1</Visible>
+		  <Help>#Lang(2005)</Help>
+		  <InterfaceType>0</InterfaceType>
+		  <CodeInterface>DropDown((#Lang(4011)|1)|(#Lang(4012)|2)|(#Lang(4013)|3)|(#Lang(4014)|4)|(#Lang(4015)|5))</CodeInterface>
+		  <Colorgroup>2</Colorgroup>
+		  <ErrorValidationMessage>#Lang(305)</ErrorValidationMessage>
+		  <RegularExpressionValidation>^[0123456]$</RegularExpressionValidation>
+		</Attribute>
+		<Attribute>
 			<Name>classname</Name>
 			<DisplayName>#Lang(117)</DisplayName>
 			<Description>#Lang(217)</Description>
@@ -368,6 +380,12 @@
 			<Sentence ID="903">List element id</Sentence>
 			<Sentence ID="904">List element id</Sentence>
 			<Sentence ID="905"></Sentence>
+			<Sentence ID="1005">Display</Sentence>
+			<Sentence ID="4011">Block</Sentence>
+			<Sentence ID="4012">Inline</Sentence>
+			<Sentence ID="4013">Flex</Sentence>
+			<Sentence ID="4014">Grid</Sentence>
+			<Sentence ID="4015">Inline-block</Sentence>
 		</Language>
 		<Language Code="fr_FR">
 			<Sentence ID="001">List v2</Sentence>
@@ -474,6 +492,12 @@
 			<Sentence ID="903">list element id</Sentence>
 			<Sentence ID="904">list element id</Sentence>
 			<Sentence ID="905"></Sentence>
+			<Sentence ID="1005">Display</Sentence>
+			<Sentence ID="4011">Block</Sentence>
+			<Sentence ID="4012">Inline</Sentence>
+			<Sentence ID="4013">Flex</Sentence>
+			<Sentence ID="4014">Grid</Sentence>
+			<Sentence ID="4015">Inline-block</Sentence>
 		</Language>
 		<Language Code="ru_RU">
 			<Sentence ID="001">Список v2</Sentence>
@@ -580,6 +604,12 @@
 			<Sentence ID="903">Идентификатор элемента списка</Sentence>
 			<Sentence ID="904">Идентификатор элемента списка</Sentence>
 			<Sentence ID="905"></Sentence>
+			<Sentence ID="1005">Display</Sentence>
+			<Sentence ID="4011">Block</Sentence>
+			<Sentence ID="4012">Inline</Sentence>
+			<Sentence ID="4013">Flex</Sentence>
+			<Sentence ID="4014">Grid</Sentence>
+			<Sentence ID="4015">Inline-block</Sentence>
 		</Language>
 	</Languages>
 	<Resources>
@@ -983,6 +1013,24 @@ class VDOM_listv2(VDOM_object):
           "clickClasses": self.clickclass.strip().split(),
         }
 
+        # Display
+        if self.visible == "0":
+            displaying = u"display: none;"
+        else:
+            if self.displaying == "1":
+                displaying = u" display: block;"
+            elif self.displaying == "2":
+                displaying = u" display: inline;"
+            elif self.displaying == "3":
+                displaying = u" display: flex;"
+            elif self.displaying == "4":
+                displaying = u" display: grid;"
+            elif self.displaying == "5":
+                displaying = u" display: inline-block;"
+            else:
+                displaying = u""
+        
+
         output = u"""<div id="o_{id}" name="{name}" objtype="listv2" ver="{version}" style="{display};z-index: {zindex};position: absolute;top: {top}px;"""\
         """left: {left}px;height: {height}px;width: {width}px" class="{css_class}" selectionmode="{selectionmode}" select-on-click="{selectonclick}">
     <ul>
@@ -1009,7 +1057,7 @@ class VDOM_listv2(VDOM_object):
             content="".join(result),
             id=obj_id,
             css=self.style % {"id": "o_" + obj_id},
-            display=u"display:none;" if self.visible == "0" else u"",
+            display=displaying,
             zindex=self.zindex,
             top=self.top,
             left=self.left,
@@ -1261,3 +1309,4 @@ if (typeof idlist === 'object')
 		</Actions>
 	</E2VDOM>
 </Type>
+
